@@ -1,0 +1,44 @@
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;}
+html,
+body {
+  height: 100%;
+  overflow: hidden;}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;}
+.login-form {
+  width: 100%;
+  padding: 2em;
+  position: relative;
+  background: rgba(black, 0.15);
+  @media screen and (min-width: 600px) {
+    width: 50vw;
+    max-width: 15em;}}
+.flex-row {
+  display: flex;
+  margin-bottom: 1em;}
+.lf--label {
+  width: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;}
+.lf--input {
+  flex: 1;
+  padding: 1em;
+  border: 0;}
+.lf--submit {
+  display: block;
+  padding: 1em;
+  width: 100%;}
+.plusplus{
+  font-size: 2rem;}
+.plusplus a{
+  border: 2px solid gainsboro ;
+  text-decoration: none;
+  color: black;}

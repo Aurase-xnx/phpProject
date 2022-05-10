@@ -1,0 +1,71 @@
+/*_Fonts_*/
+@font-face {
+    font-family: 'BatmanForeverAlternate';
+    src: local('/Custom/Fonts/BatmanForeverAlternate.eot');
+    src: local('/Custom/Fonts/BatmanForeverAlternate.eot?#iefix') format('embedded-opentype'),
+        local('/Custom/Fonts/BatmanForeverAlternate.woff2') format('woff2'),
+        local('/Custom/Fonts/BatmanForeverAlternate.woff') format('woff'),
+        local('/Custom/Fonts/BatmanForeverAlternate.ttf') format('truetype'),
+        local('/Custom/Fonts/BatmanForeverAlternate.svg#BatmanForeverAlternate') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*__Header__*/
+
+header{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  border-bottom: 1px black solid;
+  overflow: hidden;
+}
+
+.Links{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  font-family: BatmanForeverAlternate;
+}
+.logo {
+  width: 45vw;
+  height: 80px;
+  transform: scale(0.5);
+  border: 0px;
+}
+header a{
+  display: flex;
+  justify-content: flex-end;
+  font-family: ROG;
+  font-size: 2rem;
+  text-decoration: none;
+  color: black;
+  width: 10vw;
+  transform: rotate(330deg);
+  border-bottom: 1px black solid;
+}
+
+/*_Footer_*/
+
+.footer{
+  position: fixed;
+  height: 10vh;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+}
+
+.footer img{
+  height: 100%;
+  background-color: gainsboro;
+  border: 0px;
+  border-radius: 100%;
+}
+
+
+
+/********************************************************/
