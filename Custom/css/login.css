@@ -40,5 +40,8 @@ body {
   font-size: 2rem;}
 .plusplus a{
   border: 2px solid gainsboro ;
+  border-radius: 10px;
   text-decoration: none;
+  padding: 0px 2px 0px 2px;
+  margin: 0px 2px 0px 2px;
   color: black;}

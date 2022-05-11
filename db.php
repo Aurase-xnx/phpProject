@@ -8,6 +8,7 @@ $mdp='';
 try {
  $bd=new PDO('mysql:host='.$host.';dbname='.$dbName, $user, $mdp);
  $bd->exec("SET NAMES 'utf8'");
+ echo 'connected';
 }
 catch (Exception $e) {
  echo 'Error connecting to DB';
