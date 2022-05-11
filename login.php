@@ -37,7 +37,7 @@ print_r($mistakes);
 
 
     $req->closeCursor();
-    header("Location: index.php");
+    header("Location:index.php");
 
     exit();
 

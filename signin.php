@@ -25,7 +25,7 @@ if ( isset($_POST['completed']) ) {
  if ( !empty($_POST['password']) AND isset($_POST['confirmPassword'])){
    if ($_POST["password"]== $_POST["confirmPassword"]) {
      $password = trim($_POST['password']);
-     $passhash = password_hash($password,PASSWORD_DEFAULT);
+     $passhash = sha1($password);
    }
  }
  else
@@ -54,10 +54,8 @@ if ( isset($_POST['completed']) ) {
 
     $req->execute();
     $req->closeCursor();
-    header("Location: index.php");
+    header("Location:profile.php");
     exit();
-
-
 
  }
  else{
@@ -79,7 +77,7 @@ if ( isset($_POST['completed']) ) {
   </head>
   <body>
 
-    <form method="post" class='login-form' action="signin.php">
+    <form method="POST" class='login-form' action="signin.php">
 
     <div class="flex-row">
       <label class="lf--label" for="username">
