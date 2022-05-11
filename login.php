@@ -1,6 +1,5 @@
 <?php
-session_start();
-if ( isset($_POST['username']) ) {
+if ( isset($_POST['login']) ) {
  //un champ obligatoire
  if ( !empty($_POST['username']) )
  {
@@ -20,7 +19,7 @@ if ( isset($_POST['username']) ) {
  {
      $mistakes['password'] = true;
  }
-
+print_r($mistakes);
  //s'il n'y a pas d'erreur...
  if (empty($mistakes))
  {
@@ -32,11 +31,8 @@ if ( isset($_POST['username']) ) {
     $data=$req->fetch();
     if (password_verify($password, $data['password']))
     {
-
         $_SESSION['username']=$data['username'];
         $_SESSION['rights']=$data['rights'];
-
-
     }
 
 
@@ -46,6 +42,9 @@ if ( isset($_POST['username']) ) {
     exit();
 
 
+
+ }
+ else{
 
  }
 }
@@ -62,7 +61,7 @@ if ( isset($_POST['username']) ) {
     <link rel="stylesheet" href="Custom/css/login.css">
   </head>
   <body>
-    <form class='login-form'>
+    <form class='login-form' method="POST">
   <div class="flex-row">
     <label class="lf--label" for="username">
       <svg x="0px" y="0px" width="12px" height="13px">
