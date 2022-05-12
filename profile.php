@@ -8,14 +8,16 @@
     header("Location:profileN.php");
   }
 
-  if ( isset($_POST['modify']) ) {
+  if (isset($_POST['modify']) ) {
    //un champ obligatoire
    if ( !empty($_POST['firstName']) )
    {
+     echo "fn";
       $username = trim($_POST['firstName']) ;
    }
    else
    {
+     echo "fn2";
        $mistakes['firstName'] = true;
    }
    if ( !empty($_POST['lastName']) )
@@ -39,15 +41,6 @@
    {
        $mistakes['passmod'] = true;
    }
-
-
-
-
-
-   //un champ obligatoire avec certaines valeurs rejetées
-
-
-
 
    //s'il n'y a pas d'erreur...
    if (!empty($mistakes))

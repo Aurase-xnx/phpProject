@@ -23,7 +23,7 @@ if ( isset($_POST['completed']) ) {
  }
 
 
- if ( !empty($_POST['password']) AND isset($_POST['cpassword'])){
+ if ( !empty($_POST['password']) AND isset($_POST['cpassword']) AND strlen($_POST['password'])>=4){
    if ($_POST["password"]== $_POST["cpassword"]) {
      $password = trim($_POST['password']);
      $passhash = sha1($password);
