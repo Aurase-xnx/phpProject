@@ -1,4 +1,6 @@
-
+<?php
+session_start();
+ ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -14,8 +16,34 @@
         <a href="index.php">Home</a>
         <a href="samples.php">Samples</a>
         <a href="songs.php">Songs</a>
-        <a href="profile.php">Profile</a>
-        <a href="login.php">Login</a>
+
+
+        <?php
+        if (isset($_SESSION['rights'])) {
+          if($_SESSION['rights']==3)
+          {
+            echo '<a href="admin.php">Admin</a>';
+          }
+          if ($_SESSION['rights']==2) {
+            echo '<a href="modo.php">Modo</a>';
+          }
+          if ($_SESSION['rights']==1) {
+            echo '<a href="profile.php">Profile</a>';
+          }
+        }
+        else {
+          echo '<a href="profile.php">Profile</a>';
+        }
+
+
+        ?>
+        <?php if (!isset($_SESSION['username']))
+          {
+            echo '<a href="login.php">Login</a>';
+          } else {
+            echo '<a href="logout.php">Logout</a>';
+          }
+         ?>
       </div>
     </header>
   </body>

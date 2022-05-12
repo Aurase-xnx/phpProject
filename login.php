@@ -1,6 +1,6 @@
 <?php
-session_start();
 include("db.php");
+include_once('header.php');
 ?>
 <?php
 $msg = "";
@@ -10,30 +10,38 @@ if(isset($_POST['login'])) {
   $passhash = sha1($password);
   if($email != "" && $password != "") {
     try {
-      $query = "select * from `users` where `email`=:email and `passhash`=:password";
+      $query = "select * from `users` where `email`=:email and `password`=:password";
       $stmt = $bd->prepare($query);
       $stmt->bindParam('email', $email, PDO::PARAM_STR);
       $hashed = sha1($password);
       $stmt->bindParam('password',$hashed, PDO::PARAM_STR);
+
       $stmt->execute();
+
       $count = $stmt->rowCount();
       $row   = $stmt->fetch(PDO::FETCH_ASSOC);
-      echo "test";
-      if($count == 1 && !empty($row)) {
-        /******************** Your code ***********************/
-        $_SESSION['sess_id']   = $row['id'];
-        $_SESSION['sess_username'] = $row['username'];
-        $_SESSION['sess_email'] = $row['email'];
-        $_SESSION['sess_firstName'] = $row['firstName'];
-        $_SESSION['sess_lastName'] = $row['lastName'];
-        $_SESSION['sess_rights'] = $row['rights'];
-        $_SESSION['sess_active'] = $row['active'];
-        echo '<pre>' . print_r($_SESSION, TRUE) . '</pre>';
-        echo "teub";
-      } else {
-        $msg = "Invalid username and password!";
+
+      if ($row['active']==1) {
+        if($count == 1 && !empty($row)) {
+          $_SESSION['id']   = $row['id'];
+          $_SESSION['username'] = $row['username'];
+          $_SESSION['email'] = $row['email'];
+          $_SESSION['firstName'] = $row['firstName'];
+          $_SESSION['lastName'] = $row['lastName'];
+          $_SESSION['rights'] = $row['rights'];
+          $_SESSION['active'] = $row['active'];
+          $_SESSION['loggedin'] = TRUE;
+          header("Location:index.php");
+        } else {
+          $msg = "Invalid username and password!";
+        }
       }
-    } catch (PDOException $e) {
+      else {
+        echo "Your account has been disabled by an admin";
+          }
+      }
+
+      catch (PDOException $e) {
       echo "Error : ".$e->getMessage();
     }
   } else {
@@ -42,9 +50,6 @@ if(isset($_POST['login'])) {
 }
 ?>
 <!DOCTYPE html>
-<?php
-  include_once('header.php');
- ?>
 <html lang="en" dir="ltr">
   <head>
   <meta charset="utf-8">

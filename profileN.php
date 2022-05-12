@@ -1,5 +1,7 @@
 <?php
   include_once('header.php');
   include_once('footer.php');
- ?>
-<p>Songs Here</p>
+  include_once('db.php');
+
+  echo "You need to login first";
+?>
