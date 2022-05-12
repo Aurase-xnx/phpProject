@@ -1,52 +1,44 @@
 <?php
-if ( isset($_POST['login']) ) {
- //un champ obligatoire
- if ( !empty($_POST['username']) )
- {
-    $username = trim($_POST['username']) ;
- }
- else
- {
-     $mistakes['username'] = true;
- }
-
- if ( !empty($_POST['password']) )
- {
-    $password = trim($_POST['password']) ;
-    $passhash = password_hash($password,PASSWORD_DEFAULT);
- }
- else
- {
-     $mistakes['password'] = true;
- }
-print_r($mistakes);
- //s'il n'y a pas d'erreur...
- if (empty($mistakes))
- {
-     include("db.php");
-
-     $req=$bd->prepare('SELECT * FROM users WHERE username = :username');
-    $req->bindValue(':username', $username, PDO::PARAM_STR);
-    $req->execute();
-    $data=$req->fetch();
-    if (password_verify($password, $data['password']))
-    {
-        $_SESSION['username']=$data['username'];
-        $_SESSION['rights']=$data['rights'];
+session_start();
+include("db.php");
+?>
+<?php
+$msg = "";
+if(isset($_POST['login'])) {
+  $email = trim($_POST['email']);
+  $password = trim($_POST['password']);
+  $passhash = sha1($password);
+  if($email != "" && $password != "") {
+    try {
+      $query = "select * from `users` where `email`=:email and `passhash`=:password";
+      $stmt = $bd->prepare($query);
+      $stmt->bindParam('email', $email, PDO::PARAM_STR);
+      $hashed = sha1($password);
+      $stmt->bindParam('password',$hashed, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $row   = $stmt->fetch(PDO::FETCH_ASSOC);
+      echo "test";
+      if($count == 1 && !empty($row)) {
+        /******************** Your code ***********************/
+        $_SESSION['sess_id']   = $row['id'];
+        $_SESSION['sess_username'] = $row['username'];
+        $_SESSION['sess_email'] = $row['email'];
+        $_SESSION['sess_firstName'] = $row['firstName'];
+        $_SESSION['sess_lastName'] = $row['lastName'];
+        $_SESSION['sess_rights'] = $row['rights'];
+        $_SESSION['sess_active'] = $row['active'];
+        echo '<pre>' . print_r($_SESSION, TRUE) . '</pre>';
+        echo "teub";
+      } else {
+        $msg = "Invalid username and password!";
+      }
+    } catch (PDOException $e) {
+      echo "Error : ".$e->getMessage();
     }
-
-
-    $req->closeCursor();
-    header("Location:index.php");
-
-    exit();
-
-
-
- }
- else{
-
- }
+  } else {
+    $msg = "Both fields are required!";
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -61,16 +53,18 @@ print_r($mistakes);
     <link rel="stylesheet" href="Custom/css/login.css">
   </head>
   <body>
-    <form class='login-form' method="POST">
+    <h1>Log in</h1>
+
+    <form class='login-form' method="POST" action="login.php">
   <div class="flex-row">
-    <label class="lf--label" for="username">
+    <label class="lf--label" for="email">
       <svg x="0px" y="0px" width="12px" height="13px">
         <path fill="#B1B7C4" d="M8.9,7.2C9,6.9,9,6.7,9,6.5v-4C9,1.1,7.9,0,6.5,0h-1C4.1,0,3,1.1,3,2.5v4c0,0.2,0,0.4,0.1,0.7 C1.3,7.8,0,9.5,0,11.5V13h12v-1.5C12,9.5,10.7,7.8,8.9,7.2z M4,2.5C4,1.7,4.7,1,5.5,1h1C7.3,1,8,1.7,8,2.5v4c0,0.2,0,0.4-0.1,0.6 l0.1,0L7.9,7.3C7.6,7.8,7.1,8.2,6.5,8.2h-1c-0.6,0-1.1-0.4-1.4-0.9L4.1,7.1l0.1,0C4,6.9,4,6.7,4,6.5V2.5z M11,12H1v-0.5 c0-1.6,1-2.9,2.4-3.4c0.5,0.7,1.2,1.1,2.1,1.1h1c0.8,0,1.6-0.4,2.1-1.1C10,8.5,11,9.9,11,11.5V12z"/>
       </svg>
     </label>
-    <input id="username" name="username" class='lf--input' placeholder='Username' type='text'
-    <?php if(isset($username)) echo 'value="', $username; ?>>
+    <input type="email" name="email" class="lf--input" id="email"  required="" placeholder="Email">
   </div>
+
   <div class="flex-row">
     <label class="lf--label" for="password">
       <svg x="0px" y="0px" width="15px" height="5px">
@@ -79,7 +73,7 @@ print_r($mistakes);
         </g>
       </svg>
     </label>
-    <input id="password" name="password" class='lf--input' placeholder='Password' type='password'>
+    <input type="password" name="password" class="lf--input" id="password" required="" placeholder="Password">
   </div>
   <input class='lf--submit' type='submit' name='login' value='LOGIN'>
 </form>
