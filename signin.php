@@ -48,6 +48,7 @@ if ( isset($_POST['completed']) ) {
  {
      include("db.php");
 
+
     $req=$bd->prepare('INSERT INTO  users (username,email,password) VALUES (:username,:email,:password)');
     $req->bindValue(':username', $username, PDO::PARAM_STR);
     $req->bindValue(':email', $email, PDO::PARAM_STR);
@@ -55,7 +56,7 @@ if ( isset($_POST['completed']) ) {
 
     $req->execute();
     $req->closeCursor();
-    header("Location:profile.php");
+    header("Location: login.php");
     exit();
 
  }

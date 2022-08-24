@@ -53,16 +53,17 @@ if (!isset($_POST['addSample'])) {
   if (empty($mistakes)) {
     include("db.php");
 
-    $req = $bd->prepare('INSERT INTO  samples (sampleName,genre,instrument,creatorID,bpm) VALUES (:sampleName,:genre,:instrument,:creatorID,:bpm)');
-    $req->bindValue(':sampleName', $sampleName, PDO::PARAM_STR);
+
+    $req = $bd->prepare('INSERT INTO samples (sampleName,genre,instrument,creatorID,bpm) VALUES (:sampleName,:genre,:instrument,:creatorID,:bpm)');
+    $req->bindValue(":sampleName", $sampleName, PDO::PARAM_STR);
     $req->bindValue(':genre', $genre, PDO::PARAM_STR);
     $req->bindValue(':instrument', $instrument, PDO::PARAM_STR);
     $req->bindValue(':creatorID', $creatorID, PDO::PARAM_STR);
     $req->bindValue(':bpm', $bpm, PDO::PARAM_STR);
-    echo '<pre>' . print_r($_SESSION, TRUE) . '</pre>';
+    //echo '<pre>' . print_r($_SESSION, TRUE) . '</pre>';
     $req->execute();
     $req->closeCursor();
-    header("Location:samples.php");
+    header("Location: samples.php");
     exit();
   } else {
     print_r($mistakes);
