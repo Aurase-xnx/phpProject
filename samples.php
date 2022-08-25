@@ -4,12 +4,26 @@ include_once('footer.php');
 include_once('db.php');
 if (isset($_SESSION['id'])) {
   $creatorID = $_SESSION['id'];
+  ?>
+<p>Samples Here</p>
+<form action="samples.php" method="post">
+    <input type="text" name="sampleName" id="sampleName" required="" placeholder="Sample Name">
+    <input type="text" name="genre" id="genre" required="" placeholder="Genre">
+    <input type="text" name="instrument" id="instrument" required="" placeholder="Instrument">
+    <input readonly type="hidden" name="creatorID" id="creatorID" <?php if (isset($creatorID)) echo 'value="', $creatorID, '"'; ?>>
+    <input type="text" name="bpm" id="bpm" required="" placeholder="BPM">
+    <input type="submit" name="addSample" placeholder="Upload the sample">
+</form>
+<?php
 } else {
-    echo "You are not logged in! Please log in first to upload a sample.";
-}
-$sampleName = $genre = $instrument = $bpm = "";
+    echo "You are not logged in! Please log in first to upload a sample.";?>
 
-if (!isset($_POST['addSample'])) {
+    <p>Samples Here</p>
+<?php
+}
+$sampleName = $genre = $instrument = "";
+$bpm = $bpm2 = "";
+if (isset($_POST['addSample'])) {
   //un champ obligatoire
   if (!empty($_POST['sampleName'])) {
     $sampleName = trim($_POST['sampleName']);
@@ -31,43 +45,32 @@ if (!isset($_POST['addSample'])) {
 
   if (!empty($_POST['creatorID'])) {
     $creatorID = trim($_POST['creatorID']);
+    $creatorID2 = (int) $creatorID;
   } else {
     $mistakes['creatorID'] = true;
   }
 
   if (!empty($_POST['bpm'])) {
     $bpm = trim($_POST['bpm']);
+    $bpm2 = (int) $bpm;
   } else {
     $mistakes['bpm'] = true;
   }
 
-
-
-
-
-  //un champ obligatoire avec certaines valeurs rejetées
-
-
-
-
-  //s'il n'y a pas d'erreur...
-  if (empty($mistakes)) {
-    include("db.php");
-
-    $req = $bd->prepare("INSERT INTO samples (sampleName,genre,instrument,creatorID,bpm) VALUES (:sampleName,:genre,:instrument,:creatorID,:bpm)");
-    $req->bindParam(':sampleName', $sampleName, PDO::PARAM_STR);
-    $req->bindParam(':genre', $genre, PDO::PARAM_STR);
-    $req->bindParam(':instrument', $instrument, PDO::PARAM_STR);
-    $req->bindParam(':creatorID', $creatorID, PDO::PARAM_INT);
-    $req->bindParam(':bpm', $bpm, PDO::PARAM_INT);
-    //echo '<pre>' . print_r($_SESSION, TRUE) . '</pre>';
-    $req->execute();
-    $req->closeCursor();
     header("Location: samples.php");
+    $sql = $bd->prepare("INSERT INTO samples (sampleName,genre,instrument,creatorID,bpm) VALUES (:sampleName,:genre,:instrument,:creatorID2,:bpm2)");
+    $sql->bindParam(':sampleName', $sampleName, PDO::PARAM_STR, 255);
+    $sql->bindParam(':genre', $genre, PDO::PARAM_STR, 255);
+    $sql->bindParam(':instrument', $instrument, PDO::PARAM_STR, 255);
+    $sql->bindParam(':creatorID2', $creatorID2, PDO::PARAM_INT, 255);
+    $sql->bindParam(':bpm2', $bpm2, PDO::PARAM_INT, 255);
+    $sql->execute();
+
+    //$sql->debugDumpParams();
+    echo "Uploaded";
+    //$req->closeCursor();
+
     exit();
-  } else {
-    //print_r($mistakes);
-  }
 }
 
 $host = 'localhost';
@@ -76,7 +79,9 @@ $usern = 'root';
 $passw = '';
 $dsn = "mysql:host=$host;dbname=$dbname";
 // get all users
-$sql = "SELECT * FROM samples";
+$sql = "SELECT `samples`.*, `users`.`username`
+FROM `samples` 
+	LEFT JOIN `users` ON `samples`.`creatorID` = `users`.`id`;";
 
 try {
   $pdo = new PDO($dsn, $usern, $passw);
@@ -90,18 +95,6 @@ try {
 }
 
 ?>
-<p>Samples Here</p>
-<?php //echo $creatorID; ?>
-<?php //echo $_SESSION['id']; ?>
-<form action="samples.php" method="post">
-  <input type="text" name="sampleName" id="sampleName" required="" placeholder="Sample Name">
-  <input type="text" name="genre" id="genre" required="" placeholder="Genre">
-  <input type="text" name="instrument" id="instrument" required="" placeholder="Instrument">
-  <input readonly type="hidden" name="creatorID" id="creatorID" <?php if (isset($creatorID)) echo 'value="', $creatorID, '"'; ?>>
-  <input type="text" name="bpm" id="bpm" required="" placeholder="BPM">
-  <input type="submit" name="addSample" placeholder="Upload the sample">
-</form>
-
 <table>
   <thead>
     <tr>
@@ -110,7 +103,7 @@ try {
       <th>Genre</th>
       <th>Instrument</th>
       <th>BPM</th>
-      <th>creatorID</th>
+      <th>Username</th>
     </tr>
   </thead>
   <tbody>
@@ -121,7 +114,7 @@ try {
         <td><?php echo htmlspecialchars($row['genre']); ?></td>
         <td><?php echo htmlspecialchars($row['instrument']); ?></td>
         <td><?php echo htmlspecialchars($row['bpm']); ?></td>
-        <td><?php echo htmlspecialchars($row['creatorID']); ?></td>
+        <td><?php echo htmlspecialchars($row['username']); ?></td>
       </tr>
     <?php endwhile; ?>
   </tbody>

@@ -3,7 +3,7 @@ include"db.php";
 
 $username = $password = $confirmPassword = "";
 $username_err = $password_err = $confirmPassword_err = "";
-if ( isset($_POST['completed']) ) {
+if (isset($_POST['completed']) ) {
  //un champ obligatoire
  if ( !empty($_POST['username']) )
  {
@@ -57,6 +57,7 @@ if ( isset($_POST['completed']) ) {
     $req->execute();
     $req->closeCursor();
     header("Location: login.php");
+     var_dump($_POST);
     exit();
 
  }

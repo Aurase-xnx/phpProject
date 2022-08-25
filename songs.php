@@ -2,58 +2,65 @@
   include_once('header.php');
   include_once('footer.php');
   include_once('db.php');
-  if(isset($_SESSION['id']))
-  {
+  if(isset($_SESSION['id'])){
     $creatorID = $_SESSION['id'];
+    ?>
+<p>Songs Here</p>
+<form action="songs.php" method="post">
+    <input type="text" name="songName" id="songName" required="" placeholder="Song Name">
+    <input type="text" name="genreS" id="genreS" required="" placeholder="Genre">
+    <input type="text" name="bpmS" id="bpmS" required="" placeholder="BPM">
+    <input readonly type="hidden" name="creatorID" id="creatorID" <?php if (isset($creatorID)) echo 'value="', $creatorID, '"'; ?>>
+    <input type="submit" name="addSong" required="Upload the song ">
+</form>
+<?php
+  }else{
+      echo "You are not logged in! Please log in first to upload a songs.";?>
+
+        <p>Songs Here</p>
+<?php
   }
-  $songName = $genreS = $bpm = "";
-  if (!isset($_POST['addSong']) ) {
+  $songName = $genreS = "";
+  $bpm = "";
+  if (isset($_POST['addSong']) ) {
    //un champ obligatoire
-   if ( !empty($_POST['songName']) )
-   {
-      $songName = trim($_POST['songName']) ;
-   }
-   else
-   {
-       $mistakes['songName'] = true;
-   }
+   if (!empty($_POST['songName']) ){
+       $songName = trim($_POST['songName']) ;}
+   else{
+       $mistakes['songName'] = true;}
 
    if ( !empty($_POST['genreS'])){
-       $genreSS = trim($_POST['genreS']) ;
-   }
+       $genreS = trim($_POST['genreS']) ;}
    else
    {
-       $mistakes['genreS'] = true;
-   }
+       $mistakes['genreS'] = true;}
 
    if ( !empty($_POST['bpmS'])){
-       $bpmS = trim($_POST['bpmS']) ;
-   }
+       $bpmS = trim($_POST['bpmS']) ;}
    else
    {
-       $mistakes['bpmS'] = true;
-   }
+       $mistakes['bpmS'] = true;}
 
-   //s'il n'y a pas d'erreur...
-   if (empty($mistakes))
-   {
-       include("db.php");
+  if (!empty($_POST['creatorID'])) {
+      $creatorID = trim($_POST['creatorID']);
+      $creatorID2 = (int) $creatorID;
+  } else {
+      $mistakes['creatorID'] = true;
+  }
+      header("Location: songs.php");
+      $sql= $bd->prepare('INSERT INTO  songs (songName,genre,bpm,creatorID) VALUES (:songName,:genreS,:bpmS,:creatorID2)');
+      $sql->bindParam(':songName', $songName, PDO::PARAM_STR,255);
+      $sql->bindParam(':genreS', $genreS, PDO::PARAM_STR, 255);
+      $sql->bindParam(':bpmS', $bpmS, PDO::PARAM_INT, 255);
+      $sql->bindParam(':creatorID2', $creatorID2, PDO::PARAM_INT, 255);
+      $sql->execute();
 
-      $req=$bd->prepare('INSERT INTO  songs (songName,genre,bpm,creatorID) VALUES (:songName,:genre,:bpm,:creatorID)');
-      $req->bindParam(':songName', $songName, PDO::PARAM_STR);
-      $req->bindParam(':genre', $genreS, PDO::PARAM_STR);
-      $req->bindParam(':bpm', $bpmS, PDO::PARAM_STR);
-      $req->bindParam(':creatorID', $creatorID, PDO::PARAM_STR);
-      $req->execute();
-      $req->closeCursor();
-      header("Location:songs.php");
+      //$sql->debugDumpParams();
+      //echo "Ok";
       exit();
 
    }
-   else{
-     print_r($mistakes);
-   }
-  }
+
 
   $host = 'localhost';
    $dbname = 'samplitek';
@@ -61,7 +68,9 @@
    $passw = '';
   $dsn = "mysql:host=$host;dbname=$dbname";
   // get all users
-  $sql = "SELECT * FROM songs";
+  $sql = "SELECT `songs`.*, `users`.`username`
+FROM `songs` 
+	LEFT JOIN `users` ON `songs`.`creatorID` = `users`.`id`";
 
   try{
    $pdo = new PDO($dsn, $usern, $passw);
@@ -76,13 +85,6 @@
   }
 
  ?>
-<p>Songs Here</p>
-<form action="songs.php" method="post">
-  <input type="text" name="songName" id="songName" required="" placeholder="Song Name">
-  <input type="text" name="genreS" id="genreS" required="" placeholder="Genre">
-  <input type="text" name="bpms" id="bpmS" required="" placeholder="BPM">
-  <input type="submit" name="addSong" required="Upload the song ">
-</form>
 
 <table>
   <thead>
@@ -91,6 +93,7 @@
       <th>Song Name</th>
       <th>Genre</th>
       <th>BPM</th>
+      <th>username</th>
     </tr>
   </thead>
   <tbody>
@@ -100,6 +103,7 @@
       <td><?php echo htmlspecialchars($row['songName']); ?></td>
       <td><?php echo htmlspecialchars($row['genre']); ?></td>
       <td><?php echo htmlspecialchars($row['bpm']); ?></td>
+      <td><?php echo htmlspecialchars($row['username']); ?></td>
     </tr>
     <?php endwhile; ?>
   </tbody>
