@@ -5,7 +5,7 @@ include_once('db.php');
 if (isset($_SESSION['id'])) {
   $creatorID = $_SESSION['id'];
 } else {
-    echo "you are not logged in!";
+    echo "You are not logged in! Please log in first to upload a sample.";
 }
 $sampleName = $genre = $instrument = $bpm = "";
 
@@ -66,7 +66,7 @@ if (!isset($_POST['addSample'])) {
     header("Location: samples.php");
     exit();
   } else {
-    print_r($mistakes);
+    //print_r($mistakes);
   }
 }
 
@@ -91,8 +91,8 @@ try {
 
 ?>
 <p>Samples Here</p>
-<?php echo $creatorID; ?>
-<?php echo $_SESSION['id']; ?>
+<?php //echo $creatorID; ?>
+<?php //echo $_SESSION['id']; ?>
 <form action="samples.php" method="post">
   <input type="text" name="sampleName" id="sampleName" required="" placeholder="Sample Name">
   <input type="text" name="genre" id="genre" required="" placeholder="Genre">
