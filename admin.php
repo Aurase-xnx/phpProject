@@ -9,7 +9,7 @@
    $password = '';
   $dsn = "mysql:host=$host;dbname=$dbname";
   // get all users
-  $sql = "SELECT * FROM Users";
+  $sql = "SELECT * FROM users";
 
   try{
    $pdo = new PDO($dsn, $username, $password);

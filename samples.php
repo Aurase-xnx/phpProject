@@ -5,6 +5,7 @@ include_once('db.php');
 if (isset($_SESSION['id'])) {
   $creatorID = $_SESSION['id'];
 } else {
+    echo "you are not logged in!";
 }
 $sampleName = $genre = $instrument = $bpm = "";
 
@@ -53,9 +54,8 @@ if (!isset($_POST['addSample'])) {
   if (empty($mistakes)) {
     include("db.php");
 
-
-    $req = $bd->prepare('INSERT INTO samples (sampleName,genre,instrument,creatorID,bpm) VALUES (:sampleName,:genre,:instrument,:creatorID,:bpm)');
-    $req->bindValue(":sampleName", $sampleName, PDO::PARAM_STR);
+    $req = $bd->prepare("INSERT INTO samples (sampleName,genre,instrument,creatorID,bpm) VALUES (:sampleName,:genre,:instrument,:creatorID,:bpm)");
+    $req->bindValue(':sampleName', $sampleName, PDO::PARAM_STR);
     $req->bindValue(':genre', $genre, PDO::PARAM_STR);
     $req->bindValue(':instrument', $instrument, PDO::PARAM_STR);
     $req->bindValue(':creatorID', $creatorID, PDO::PARAM_STR);
