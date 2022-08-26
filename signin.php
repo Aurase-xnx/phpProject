@@ -28,10 +28,10 @@ if (isset($_POST['completed']) ) {
      $password = trim($_POST['password']);
      $passhash = sha1($password);
    }
- }
- else
- {
-     $mistakes['password'] = true;
+   else{
+       echo "Mismatching Passwords";
+       $mistakes['password'] = true;
+   }
  }
 
 
@@ -62,7 +62,7 @@ if (isset($_POST['completed']) ) {
 
  }
  else{
-   print_r($mistakes);
+   //print_r($mistakes);
  }
 }
 

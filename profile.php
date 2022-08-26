@@ -12,17 +12,15 @@
   }
     $passhash = "";
   if (isset($_POST['modify'])) {
-      echo "prout";
       $id = $_SESSION['id'];
    //un champ obligatoire
      if ($_POST["passmod"]== $_POST["passmodconf"]) {
        $passmod = trim($_POST['passmod']);
        $passhash = sha1($passmod);
-       echo "ok";
          $datamod = [
              'passhash' => $passhash,
          ];
-         echo $passhash;
+         header("Location: profile.php");
          $stmt= $bd->prepare("UPDATE users SET password=:pass WHERE id=:id");
          $stmt->bindParam(':pass',$passhash,PDO::PARAM_STR);
          $stmt->bindParam(':id',$_SESSION['id'],PDO::PARAM_STR);
