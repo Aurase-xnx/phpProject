@@ -230,13 +230,13 @@ if (isset($_POST['modRightsUser'])){
     }
 }
 ?>
-<p>Deactivate someone's account? (input the id and the status, "0" for deactivated)</p>
-<form action="admin.php" method="post">
-    <input type="text" name="userID" id="userID" placeholder="User ID">
-    <input type="text" name="userACTIVE" id="userACTIVE" placeholder="User Rights">
-    <input type="submit" name="modActiveUser" placeholder="Give new rights to users">
-</form>
-<?php
+<!--<p>Deactivate someone's account? (input the id and the status, "0" for deactivated)</p>-->
+<!--<form action="admin.php" method="post">-->
+<!--    <input type="text" name="userID" id="userID" placeholder="User ID">-->
+<!--    <input type="text" name="userACTIVE" id="userACTIVE" placeholder="User Rights">-->
+<!--    <input type="submit" name="modActiveUser" placeholder="Give new rights to users">-->
+<!--</form>-->
+
 //if (isset($_POST['modActiveUser'])){
 //    if (!empty($_POST['userID']) and !empty($_POST['userACTIVE'])){
 //        $userId = trim($_POST['userID']);
@@ -248,4 +248,3 @@ if (isset($_POST['modRightsUser'])){
 //        exit();
 //    }
 //}
-//?>
