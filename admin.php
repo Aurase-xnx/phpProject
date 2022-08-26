@@ -3,7 +3,7 @@
   include_once('db.php');
 ?>
 <h1>Administration</h1>
-<h1>Welcome Admin</h1>
+
 
 <?php
 if ($_SESSION['rights']=="3")
@@ -30,6 +30,7 @@ if ($_SESSION['rights']=="3")
     }
 
     ?>
+    <h1>Welcome Admin</h1>
     <table>
         <thead>
         <tr>
@@ -141,14 +142,8 @@ if ($_SESSION['rights']=="3")
 
     }
 
-}
-else{
-    echo "Trying to be clever boy ?";
-}
-?>
 
 
-<?php
 $host = 'localhost';
 $dbname = 'samplitek';
 $usern = 'root';
@@ -228,5 +223,10 @@ if (isset($_POST['modRightsUser'])){
         $stmt->execute();
         exit();
     }
+}
+
+}
+else{
+    echo "Trying to be clever boy ?";
 }
 ?>
